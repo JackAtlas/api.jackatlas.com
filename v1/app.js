@@ -2,7 +2,7 @@ const Koa = require('koa')
 const app = module.exports = new Koa()
 const convert = require('koa-convert')
 const onerror = require('koa-onerror')
-const bodyparser = require('koa-bodyparser')()
+const bodyparser = require('koa-body')
 const logger = require('koa-logger')
 const session = require('koa-session')
 
@@ -24,7 +24,7 @@ const CONFIG = {
 
 app.use(convert(logger()))
   .use(convert(session(CONFIG, app)))
-  .use(convert(bodyparser))
+  .use(bodyparser())
 
 app.use(async (ctx, next) => {
   try {

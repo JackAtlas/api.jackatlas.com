@@ -17,6 +17,8 @@ router
   // 文章相关
   .get('/v1/admin/articles', AdminArticle.getArticles)        // 获取所有文章
   .get('/v1/admin/article', AdminArticle.getArticleByTitle)   // 获取一篇文章
-  .post('/v1/admin/articles', AdminArticle.postArticle)       // 新增文章
+  .post('/v1/admin/article', AdminArticle.postArticle)        // 新增文章
+  .put('/v1/admin/article', AdminArticle.updateArticle)       // 修改一篇文章
+  .delete('/v1/admin/article', AdminArticle.deleteArticle)    // 删除一篇文章
 
 module.exports = router
