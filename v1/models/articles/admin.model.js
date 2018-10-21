@@ -21,6 +21,6 @@ const AdminArticleSchema = new Schema({
 })
 
 // status
-// 0：删除，1：草稿，2：已发布，3：已删除
+// 1：草稿，2：已发布，3：已删除
 
 module.exports = mongoose.model('Articles', AdminArticleSchema)

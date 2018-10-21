@@ -14,6 +14,7 @@ router
   .post('/v1/admin/login', AdminUser.signIn)                  // 用户登录
   .post('/v1/admin/logout', AdminUser.signOut)                // 用户登出
   .post('/v1/admin/create', AdminUser.createUser)             // 创建用户
+  .get('/v1/admin/user', AdminUser.getUserInfo)               // 获取单个用户信息
   // 文章相关
   .get('/v1/admin/articles', AdminArticle.getArticles)        // 获取所有文章
   .get('/v1/admin/article', AdminArticle.getArticleByTitle)   // 获取一篇文章
