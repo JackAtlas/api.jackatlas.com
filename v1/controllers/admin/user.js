@@ -34,10 +34,10 @@ class AdminUser {
     if (!name) return ctx.throw(400, '请输入用户名')
     if (!password) return ctx.throw(400, '请输入密码')
     // 此段注释禁用了默认用户
-    // if (name === AdminConfig.name && md5(password) === AdminConfig.password) {
-    //   ctx.session.user = { name, password }
-    //   return ctx.body = {code: 0, msg: "成功"}
-    // }
+    if (name === AdminConfig.name && md5(password) === AdminConfig.password) {
+      ctx.session.user = { name, password, roles: AdminConfig.roles }
+      return ctx.body = {code: 0, msg: 'success'}
+    }
     const result = await AdminUserModel.findOne({ name, password: md5(password) })
     if (!result) return ctx.throw(403, '用户名或密码错误')
     ctx.session.user = result
