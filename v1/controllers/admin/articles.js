@@ -11,6 +11,8 @@ mongoose.Promise = global.Promise
 
 const { AdminArticleModel } = require('../../models')
 
+const { parseTime } = require('../../utils')
+
 class AdminArticle {
   // 获取所有文章
   static async getArticles(ctx) {
@@ -23,14 +25,7 @@ class AdminArticle {
   static async getArticleByTitle(ctx) {
     const { query } = ctx.request
     if (_.isEmpty(query)) {
-      ctx.status = 403
-      ctx.statusText = '参数错误'
-      ctx.body = {
-        code: 1000,
-        msg: '参数错误',
-        result: null
-      }
-      return
+      return ctx.body = { code: 1000, msg: '参数错误', result: {} }
     }
     const result = await AdminArticleModel.findOneAndUpdate(query, { $inc: { readNum: 1} }, { new: true })
     return ctx.body = { code: 0, msg: 'success', result }
@@ -40,21 +35,17 @@ class AdminArticle {
   static async postArticle(ctx) {
     if (!ctx.session.user) {
       ctx.status = 401
-      ctx.body = { code: 2000, msg: '请先登录', result: null }
+      ctx.body = { code: 2000, msg: '请先登录', result: {} }
       return
     }
-    const { title, enTitle, author, summary, content, status, tags, fakeReadNum } = ctx.request.body
-    if (!title || !enTitle || !content || !status) {
-      ctx.status = 403
-      ctx.body = { code: 1000, msg: '参数错误', result: null }
-      return
+    const { title, enTitle, author, summary, content, status, tags, fakeReadNum, time } = ctx.request.body
+    if (!title || !enTitle || !content || !status || !time) {
+      return ctx.body = { code: 1000, msg: '参数错误', result: {} }
     }
     const sameTitleExisted = await AdminArticleModel.findOne({ title })
     const sameEnTitleExisted = await AdminArticleModel.findOne({ enTitle })
     if (sameTitleExisted || sameEnTitleExisted) {
-      ctx.status = 403
-      ctx.body = { code: 1000, msg: '已有同名文章', result: null }
-      return
+      return ctx.body = { code: 1000, msg: '已有同名文章', result: {} }
     }
     const result = await AdminArticleModel.create({
       title,
@@ -63,8 +54,9 @@ class AdminArticle {
       summary,
       content,
       status: status || 1,
-      createTime: new Date(),
-      updateTime: new Date(),
+      createTime: parseTime(new Date()),
+      updateTime: parseTime(new Date()),
+      time: time || parseTime(new Date()),
       tags,
       fakeReadNum
     })
@@ -81,29 +73,23 @@ class AdminArticle {
   static async updateArticle(ctx) {
     if (!ctx.session.user) {
       ctx.status = 401
-      ctx.body = { code: 2000, msg: '请先登录', result: null }
+      ctx.body = { code: 2000, msg: '请先登录', result: {} }
       return
     }
     const query = ctx.request.body
     if (_.isEmpty(query)) {
-      ctx.status = 403
-      ctx.statusText = '参数错误'
-      ctx.body = {
-        code: 1000,
-        msg: '参数错误',
-        result: null
-      }
-      return
+      return ctx.body = { code: 1000, msg: '参数错误', result: {} }
     }
-    const fieldsCanUpdate = ['title', 'enTitle', 'summary', 'content', 'status', 'tags', 'fakeReadNum']
-    const fieldToUpdate = {}
+    const fieldsCanUpdate = ['title', 'enTitle', 'summary', 'content', 'status', 'tags', 'fakeReadNum', 'times']
+    const fieldToUpdate = {
+      updateTime: parseTime(new Date())
+    }
     fieldsCanUpdate.forEach(f => {
       if (query[f]) {
         fieldToUpdate[f] = query[f]
       }
     })
     const result = await AdminArticleModel.findOneAndUpdate({ _id: query._id }, {
-      $currentDate: { updateTime: true },
       $set: fieldToUpdate
     }, { new: true })
     return ctx.body = { code: 0, msg: 'success', result }
@@ -115,22 +101,15 @@ class AdminArticle {
   static async deleteArticle(ctx) {
     if (!ctx.session.user) {
       ctx.status = 401
-      ctx.body = { code: 2000, msg: '请先登录', result: null }
+      ctx.body = { code: 2000, msg: '请先登录', result: {} }
       return
     }
     const { query } = ctx.request
     if (_.isEmpty(query)) {
-      ctx.status = 403
-      ctx.statusText = '参数错误'
-      ctx.body = {
-        code: 1000,
-        msg: '参数错误',
-        result: null
-      }
-      return
+      return ctx.body = { code: 1000, msg: '参数错误', result: {} }
     }
     const result = await AdminArticleModel.remove(query)
-    return ctx.body = { code: 0, msg: 'success', result: null }
+    return ctx.body = { code: 0, msg: 'success', result: {} }
   }
 }
 

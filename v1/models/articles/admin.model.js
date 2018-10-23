@@ -6,6 +6,8 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
+const { parseTime } = require('../../utils')
+
 const AdminArticleSchema = new Schema({
   title: { type: String, required: true },
   enTitle: { type: String, required: true },
@@ -13,8 +15,9 @@ const AdminArticleSchema = new Schema({
   summary: { type: String, required: true },
   content: { type: String, required: true },
   status: { type: Number, required: true },
-  createTime: { type: Date, default: new Date() },
-  updateTime: { type: Date, default: new Date() },
+  createTime: { type: String, default: parseTime(new Date()) },
+  updateTime: { type: String, default: parseTime(new Date()) },
+  time: { type: String, default: parseTime(new Date()) },
   tags: { type: Array, default: [] },
   fakeReadNum: { type: Number, default: 0 },
   readNum: { type: Number, default: 0 }
