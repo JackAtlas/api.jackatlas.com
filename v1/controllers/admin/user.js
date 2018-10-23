@@ -14,11 +14,11 @@ class AdminUser {
   // 创建用户
   static async createUser(ctx) {
     const { name, password, roles } = ctx.request.body
-    if (!name) return ctx.throw(400, '请输入用户名')
-    if (!password) return ctx.throw(400, '请输入密码')
-    if (!roles || roles.length < 1) return ctx.throw(400, '用户角色不能为空')
+    if (!name) return ctx.body = { code: 1000, msg: '请输入用户名', result: {} }
+    if (!password) return ctx.body = { code: 1000, msg: '请输入密码', result: {} }
+    if (!roles || roles.length < 1) return ctx.body = { code: 1000, msg: '用户角色不能为空', result: {} }
     const isExisted = await AdminUserModel.findOne({ name })
-    if (isExisted) return ctx.throw(403, '该用户已存在')
+    if (isExisted) return ctx.body = { code: 1000, msg: '该用户已存在', result: {} }
     const result = await AdminUserModel.create({ name, password: md5(password), roles })
     if (result) {
       ctx.session.user = result
@@ -31,15 +31,15 @@ class AdminUser {
   // 用户登录
   static async signIn(ctx) {
     const { name, password } = ctx.request.body
-    if (!name) return ctx.throw(400, '请输入用户名')
-    if (!password) return ctx.throw(400, '请输入密码')
+    if (!name) return ctx.body = { code: 1000, msg: '请输入用户名', result: {} }
+    if (!password) return ctx.body = { code: 1000, msg: '请输入密码', result: {} }
     // 此段注释禁用了默认用户
     // if (name === AdminConfig.name && md5(password) === AdminConfig.password) {
     //   ctx.session.user = { name, password, roles: AdminConfig.roles }
     //   return ctx.body = {code: 0, msg: 'success'}
     // }
     const result = await AdminUserModel.findOne({ name, password: md5(password) })
-    if (!result) return ctx.throw(403, '用户名或密码错误')
+    if (!result) return ctx.body = { code: 1000, msg: '用户名或密码错误', result: {} }
     ctx.session.user = result
     return ctx.body = { code: 0, msg: 'success', result: {} }
   }
