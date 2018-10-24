@@ -17,7 +17,7 @@ class AdminArticle {
   // 获取所有文章
   static async getArticles(ctx) {
     const { query } = ctx.request
-    const result = await AdminArticleModel.find(query || {}) || []
+    const result = await AdminArticleModel.find(query || {}).sort({ time: 1 }) || []
     return ctx.body = { code: 0, msg: 'success', result }
   }
 
@@ -80,7 +80,7 @@ class AdminArticle {
     if (_.isEmpty(query)) {
       return ctx.body = { code: 1000, msg: '参数错误', result: {} }
     }
-    const fieldsCanUpdate = ['title', 'enTitle', 'summary', 'content', 'status', 'tags', 'fakeReadNum', 'times']
+    const fieldsCanUpdate = ['title', 'enTitle', 'summary', 'content', 'status', 'tags', 'fakeReadNum', 'time']
     const fieldToUpdate = {
       updateTime: parseTime(new Date())
     }
