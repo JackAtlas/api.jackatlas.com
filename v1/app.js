@@ -9,7 +9,7 @@ const session = require('koa-session')
 const db = require('./models/db')
 const config = require('./config/common')
 
-const adminRouter = require('./routes/admin')
+const router = require('./routes')
 
 onerror(app)
 
@@ -38,8 +38,8 @@ app.use(async (ctx, next) => {
   }
 })
 
-app.use(adminRouter.routes())
-  .use(adminRouter.allowedMethods())
+app.use(router.routes())
+  .use(router.allowedMethods())
 
 app.listen(config.port)
 

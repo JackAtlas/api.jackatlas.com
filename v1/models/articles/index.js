@@ -1,6 +1,6 @@
 /**
  * @author jackatlas
- * @use    管理后台文章 schema
+ * @use    文章 schema
  */
 
 const mongoose = require('mongoose')
@@ -8,7 +8,7 @@ const Schema = mongoose.Schema
 
 const { parseTime } = require('../../utils')
 
-const AdminArticleSchema = new Schema({
+const ArticleSchema = new Schema({
   title: { type: String, required: true },
   enTitle: { type: String, required: true },
   author: { type: String, required: true },
@@ -26,4 +26,4 @@ const AdminArticleSchema = new Schema({
 // status
 // 1：草稿，2：已发布，3：已删除
 
-module.exports = mongoose.model('AdminArticles', AdminArticleSchema)
+module.exports = mongoose.model('articles', ArticleSchema)

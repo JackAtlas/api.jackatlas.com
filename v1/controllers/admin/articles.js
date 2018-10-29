@@ -9,7 +9,8 @@ const _ = require('lodash')
 
 mongoose.Promise = global.Promise
 
-const { AdminArticleModel } = require('../../models')
+const config = require('../../models/config.js')
+const { ArticleModel } = require('../../models')
 
 const { parseTime } = require('../../utils')
 
@@ -17,7 +18,7 @@ class AdminArticle {
   // 获取所有文章
   static async getArticles(ctx) {
     const { query } = ctx.request
-    const result = await AdminArticleModel.find(query || {}).sort({ time: 1 }) || []
+    const result = await ArticleModel.find(query || {}).sort({ time: 0 }) || []
     return ctx.body = { code: 0, msg: 'success', result }
   }
 
@@ -27,7 +28,7 @@ class AdminArticle {
     if (_.isEmpty(query)) {
       return ctx.body = { code: 1000, msg: '参数错误', result: {} }
     }
-    const result = await AdminArticleModel.findOneAndUpdate(query, { $inc: { readNum: 1} }, { new: true })
+    const result = await ArticleModel.findOneAndUpdate(query, { $inc: { readNum: 1, fakeReadNum: 1} }, { new: true })
     return ctx.body = { code: 0, msg: 'success', result }
   }
 
@@ -42,18 +43,18 @@ class AdminArticle {
     if (!title || !enTitle || !content || !status || !time) {
       return ctx.body = { code: 1000, msg: '参数错误', result: {} }
     }
-    const sameTitleExisted = await AdminArticleModel.findOne({ title })
-    const sameEnTitleExisted = await AdminArticleModel.findOne({ enTitle })
+    const sameTitleExisted = await ArticleModel.findOne({ title })
+    const sameEnTitleExisted = await ArticleModel.findOne({ enTitle })
     if (sameTitleExisted || sameEnTitleExisted) {
       return ctx.body = { code: 1000, msg: '已有同名文章', result: {} }
     }
-    const result = await AdminArticleModel.create({
+    const result = await ArticleModel.create({
       title,
       enTitle,
       author: ctx.session.user.name,
       summary,
       content,
-      status: status || 1,
+      status: status || config.article.status.draft,
       createTime: parseTime(new Date()),
       updateTime: parseTime(new Date()),
       time: time || parseTime(new Date()),
@@ -89,7 +90,7 @@ class AdminArticle {
         fieldToUpdate[f] = query[f]
       }
     })
-    const result = await AdminArticleModel.findOneAndUpdate({ _id: query._id }, {
+    const result = await ArticleModel.findOneAndUpdate({ _id: query._id }, {
       $set: fieldToUpdate
     }, { new: true })
     return ctx.body = { code: 0, msg: 'success', result }
@@ -108,7 +109,7 @@ class AdminArticle {
     if (_.isEmpty(query)) {
       return ctx.body = { code: 1000, msg: '参数错误', result: {} }
     }
-    const result = await AdminArticleModel.remove(query)
+    const result = await ArticleModel.remove(query)
     return ctx.body = { code: 0, msg: 'success', result: {} }
   }
 }

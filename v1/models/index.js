@@ -1,10 +1,7 @@
-const AdminArticleModel = require('./articles/admin.model')
+const ArticleModel = require('./articles')
 const AdminUserModel = require('./users/admin.model')
 
-const BlogArticleModel = require('./articles/blog.model')
-
 module.exports = {
-  AdminArticleModel,
-  AdminUserModel,
-  BlogArticleModel
+  ArticleModel,
+  AdminUserModel
 }
