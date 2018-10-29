@@ -15,7 +15,7 @@ const { ArticleModel } = require('../../models/')
 class BlogArticle {
   // 获取所有文章
   static async getArticles(ctx) {
-    const temp = await ArticleModel.find({ status: config.article.status.post }).sort({ time: 1 }) || []
+    const temp = await ArticleModel.find({ status: config.article.status.post }).sort({ time: -1 }) || []
     const result = temp.map(t => ({
       title: t.title,
       enTitle: t.enTitle,

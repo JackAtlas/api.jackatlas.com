@@ -18,7 +18,7 @@ class AdminArticle {
   // 获取所有文章
   static async getArticles(ctx) {
     const { query } = ctx.request
-    const result = await ArticleModel.find(query || {}).sort({ time: 0 }) || []
+    const result = await ArticleModel.find(query || {}).sort({ time: -1 }) || []
     return ctx.body = { code: 0, msg: 'success', result }
   }
 
