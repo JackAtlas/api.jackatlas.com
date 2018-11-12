@@ -51,7 +51,7 @@ class AdminArticle {
     const result = await ArticleModel.create({
       title,
       enTitle,
-      author: ctx.session.user.name,
+      author,
       summary,
       content,
       status: status || config.article.status.draft,
@@ -81,7 +81,7 @@ class AdminArticle {
     if (_.isEmpty(query)) {
       return ctx.body = { code: 1000, msg: '参数错误', result: {} }
     }
-    const fieldsCanUpdate = ['title', 'enTitle', 'summary', 'content', 'status', 'tags', 'fakeReadNum', 'time']
+    const fieldsCanUpdate = ['title', 'enTitle', 'summary', 'author', 'content', 'status', 'tags', 'fakeReadNum', 'time']
     const fieldToUpdate = {
       updateTime: parseTime(new Date())
     }
