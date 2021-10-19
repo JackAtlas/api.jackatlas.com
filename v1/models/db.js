@@ -6,7 +6,7 @@
 const mongoose = require('mongoose')
 const config = require('../config/common')
 
-mongoose.connect(config.mongo.uri)
+mongoose.connect(config.mongo.uri, { useNewUrlParser: true })
 
 // 连接成功
 mongoose.connection.once('connected', () => {
