@@ -1,1 +1,1 @@
-#api.jackatlas.com
+#api.jackatlas.xyz
