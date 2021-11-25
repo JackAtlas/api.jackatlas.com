@@ -1,1 +1,1 @@
-#api.jackatlas.xyz
+# JackAtlas.xyz/api
