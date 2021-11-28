@@ -4,7 +4,9 @@
  */
 
 const BlogArticle = require('./blog/articles')
+const BlogDemo = require('./blog/demos')
 
 module.exports = {
-  BlogArticle
+  BlogArticle,
+  BlogDemo
 }

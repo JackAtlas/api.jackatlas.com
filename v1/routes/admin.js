@@ -3,7 +3,7 @@
  * @use    管理后台接口配置
  */
 
-const { AdminArticle, AdminUser } = require('../controllers/admin.export')
+const { AdminArticle, AdminDemo, AdminUser } = require('../controllers/admin.export')
 const router = require('koa-router')()
 
 router
@@ -21,5 +21,9 @@ router
   .post('/article', AdminArticle.postArticle)        // 新增文章
   .put('/article', AdminArticle.updateArticle)       // 修改一篇文章
   .delete('/article', AdminArticle.deleteArticle)    // 删除一篇文章
+  // 案例相关
+  .get('/demos', AdminDemo.getDemos)                 // 获取所有案例
+  .post('/demo', AdminDemo.postDemo)                 // 新增案例
+  .put('/demo', AdminDemo.updateDemo)                // 修改案例
 
 module.exports = router
