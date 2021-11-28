@@ -1,1 +1,1 @@
-api.jackatlas.com
+# JackAtlas.xyz API v1
