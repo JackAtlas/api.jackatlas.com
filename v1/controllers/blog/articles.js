@@ -6,9 +6,6 @@
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
 
-const showdown = require('showdown')
-const converter = new showdown.Converter()
-
 const config = require('../../models/config.js')
 const { ArticleModel } = require('../../models/')
 
@@ -41,7 +38,7 @@ class BlogArticle {
         enTitle: temp.enTitle,
         author: temp.author,
         summary: temp.summary,
-        content: converter.makeHtml(temp.content),
+        content: temp.content,
         time: temp.time,
         readNum: temp.readNum > temp.fakeReadNum ? temp.readNum : temp.fakeReadNum
       }
